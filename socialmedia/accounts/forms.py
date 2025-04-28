@@ -10,7 +10,7 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
-        fields = ('username', 'email', 'profile_picture', 'bio', 'birth_date')
+        fields = ('username', 'email', 'profile_picture', 'bio', 'birth_date','studies','live_in','form','marride','phone_num','your_flower','fb_link','linkid_link','instagram_link','socialmeida_link','github_link')
 
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):

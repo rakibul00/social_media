@@ -1,0 +1,12 @@
+asgiref
+async-timeout
+channels
+channels_redis
+crispy-bootstrap5
+Django
+django-crispy-forms
+msgpack
+pillow
+redis
+sqlparse
+typing_extensions

@@ -54,7 +54,7 @@ urlpatterns = [
     path('search/', core_views.search, name='search'),
     path('create-story/', core_views.create_story, name='create_story'),
  
-   
+    path('post/<int:post_id>/', core_views.post_detail, name='post_detail'),
     path('stories/', core_views.view_stories, name='view_stories'),
     path('stories/create/', core_views.create_story, name='create_story'),
     path('post/<int:post_id>/', core_views.post, name='post_detail'),

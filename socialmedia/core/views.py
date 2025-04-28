@@ -8,7 +8,12 @@ from django.shortcuts import render, get_object_or_404
 
 @login_required
 def home(request):
-  
+    profile_user = request.user  # Get the currently logged-in user
+    stories = Story.objects.filter(
+        created_at__gte=timezone.now() - timezone.timedelta(hours=24)
+    ).order_by('-created_at')
+    posts = Post.objects.all().order_by('-created_at')
+    
     stories = Story.objects.filter(
         created_at__gte=timezone.now() - timezone.timedelta(hours=24)
     ).order_by('-created_at')
@@ -23,7 +28,7 @@ def home(request):
             return redirect('home')
     else:
         form = PostForm()
-    return render(request, 'core/home.html', {'posts': posts, 'form': form,'stories': stories})
+    return render(request, 'core/home.html', {'posts': posts, 'form': form,'stories': stories,   'profile_user': profile_user,})
 
 @login_required
 def delete_post(request, post_id):
@@ -380,3 +385,30 @@ def respond_friend_request(request, request_id, action):
         messages.info(request, f'You rejected the friend request from {friendship.from_user.username}.')
     friendship.save()
     return redirect('manage_friend_requests')
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Post, Comment
+from .forms import CommentForm
+
+@login_required
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    comments = Comment.objects.filter(post=post).order_by('created_at')
+
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.post = post
+            comment.save()
+            return redirect('post_detail', post_id=post.id)
+    else:
+        form = CommentForm()
+
+    return render(request, 'core/details.html', {'post': post, 'comments': comments, 'form': form})
